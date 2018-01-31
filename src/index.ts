@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 "use strict";
 import * as inquirer from "inquirer";
 import { create, CreateArgs } from "./creator";
