@@ -1,10 +1,15 @@
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
-import { create } from './index';
+import { create, COMPONENTS_PATH } from './index';
 
-function buildPath(testDir: string, componentName: string, fileName: string) {
-  return path.join(testDir, componentName, fileName);
+function buildPath(
+  testDir: string,
+  componentsPath: string,
+  componentName: string,
+  fileName: string
+) {
+  return path.join(testDir, componentsPath, componentName, fileName);
 }
 
 describe('When running stencil-cli', () => {
@@ -20,17 +25,20 @@ describe('When running stencil-cli', () => {
 
     componentPath = buildPath(
       TEST_DIR,
+      COMPONENTS_PATH,
       COMPONENT_NAME,
       `${COMPONENT_NAME}.tsx`
     );
     componentStylePath = buildPath(
       TEST_DIR,
+      COMPONENTS_PATH,
       COMPONENT_NAME,
       `${COMPONENT_NAME}.scss`
     );
 
     componentTestPath = buildPath(
       TEST_DIR,
+      COMPONENTS_PATH,
       COMPONENT_NAME,
       `${COMPONENT_NAME}.spec.tsx`
     );

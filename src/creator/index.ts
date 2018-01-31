@@ -1,10 +1,12 @@
-require("source-map-support").install();
-import * as fse from "fs-extra";
-import * as path from "path";
-import { createComponentContent } from "../templates/component";
-import { createStyleContent } from "../templates/style";
-import { createComponentTestContent } from "../templates/test";
-import { StencilConfigManager } from "../stencilConfigManager";
+require('source-map-support').install();
+import * as fse from 'fs-extra';
+import * as path from 'path';
+import { createComponentContent } from '../templates/component';
+import { createStyleContent } from '../templates/style';
+import { createComponentTestContent } from '../templates/test';
+import { StencilConfigManager } from '../stencilConfigManager';
+
+export const COMPONENTS_PATH = 'src/components';
 
 export interface CreateArgs {
   currentDir: string;
@@ -21,7 +23,8 @@ export async function create({
   addToStencilConfig = false,
   currentDir = process.cwd()
 }: CreateArgs) {
-  const componentPath = path.resolve(currentDir, componentName);
+  const componentsPath = path.join(currentDir, COMPONENTS_PATH);
+  const componentPath = path.resolve(componentsPath, componentName);
   const directoryExists = await componentDirectoryExists(componentPath);
   if (directoryExists) {
     throw new Error(
@@ -53,7 +56,7 @@ async function addComponentToStencilConfig({
   componentName: string;
   currentDir: string;
 }) {
-  const configPath = path.resolve(currentDir, "stencil.config.js");
+  const configPath = path.resolve(currentDir, 'stencil.config.js');
   let stencilConfigManager: StencilConfigManager;
   try {
     const stencilConfig = require(configPath);
@@ -81,7 +84,7 @@ async function createFolder({ componentPath }: { componentPath: string }) {
 }
 function createComponentFileName(
   componentName: string,
-  extension: string = "tsx"
+  extension: string = 'tsx'
 ) {
   return `${componentName}.${extension}`;
 }
@@ -95,7 +98,7 @@ async function createComponent({
 }) {
   const componentContent = createComponentContent({
     componentName,
-    styleFile: "scss"
+    styleFile: 'scss'
   });
 
   return await fse.writeFile(
@@ -107,7 +110,7 @@ async function createComponent({
 async function createComponentStyleFile({
   componentName,
   componentPath,
-  styleExtension = "scss"
+  styleExtension = 'scss'
 }: {
   componentName: string;
   componentPath: string;
@@ -129,7 +132,7 @@ async function createComponentStyleFile({
 async function createComponentTestFile({
   componentName,
   componentPath,
-  testPattern = "spec"
+  testPattern = 'spec'
 }: {
   componentName: string;
   componentPath: string;
