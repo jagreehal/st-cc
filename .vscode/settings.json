@@ -1,0 +1,6 @@
+{
+  "editor.formatOnSave": true,
+  "typescript.format.enable": true,
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "prettier.eslintIntegration": false
+}

@@ -1,0 +1,74 @@
+{
+  "name": "st-cc",
+  "version": "0.0.1",
+  "description": "Stencil create component cli",
+  "preferGlobal": true,
+  "files": ["/dist", ".bin"],
+  "bin": {
+    "st-cc": "./bin/st-cc"
+  },
+  "main": "./bin/st-cc",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "cross-env NODE_ENV=production tsc",
+    "dev":
+      "npm run build && concurrently -k \"npm run watch\" \"npm run nodemon\"",
+    "nodemon":
+      "nodemon --inspect=0.0.0.0:9230  --watch dist --ignore **/*.spec.js dist/index.js",
+    "test": "jest",
+    "test-watch": "jest --watch",
+    "tsc-watch": "tsc -w"
+  },
+  "author": "Jag Reehal",
+  "license": "MIT",
+  "dependencies": {
+    "chalk": "^2.3.0",
+    "commander": "^2.13.0",
+    "fs-extra": "^5.0.0",
+    "inquirer": "^5.0.1"
+  },
+  "devDependencies": {
+    "@types/fs-extra": "^5.0.0",
+    "@types/inquirer": "^0.0.36",
+    "@types/jest": "^22.1.1",
+    "@types/node": "^9.4.0",
+    "@types/prettier": "^1.10.0",
+    "@types/source-map-support": "^0.4.0",
+    "concurrently": "3.5.1",
+    "cross-env": "5.1.3",
+    "jest": "^22.1.4",
+    "nodemon": "^1.14.11",
+    "prettier": "^1.10.2",
+    "ts-jest": "22.0.2",
+    "tslint": "^5.9.1",
+    "tslint-config-airbnb": "5.5.0",
+    "tslint-config-prettier": "^1.6.0",
+    "typescript": "^2.6.2"
+  },
+  "jest": {
+    "moduleFileExtensions": ["ts", "tsx", "js"],
+    "transform": {
+      ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
+    },
+    "testMatch": ["**/*.spec.(ts|tsx)"],
+    "testEnvironment": "node",
+    "testPathIgnorePatterns": ["node_modules/", "dist"],
+    "coveragePathIgnorePatterns": [
+      "node_modules/",
+      "dist",
+      "**/*.spec.(ts|tsx)"
+    ],
+    "coverageReporters": ["lcov", "html"]
+  },
+  "engines": {
+    "node": ">=6.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/jagreehal/st-cc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/jagreehal/st-cc/issues"
+  },
+  "homepage": "https://github.com/jagreehal/st-cc#readme"
+}
