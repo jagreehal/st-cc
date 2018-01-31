@@ -1,13 +1,13 @@
 {
   "name": "st-cc",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Stencil create component cli",
   "preferGlobal": true,
-  "files": ["/dist", ".bin"],
+  "files": ["/dist"],
   "bin": {
-    "st-cc": "./bin/st-cc"
+    "st-cc": "./dist/index.js"
   },
-  "main": "./bin/st-cc",
+  "main": "./dist/index.js",
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "cross-env NODE_ENV=production tsc",
