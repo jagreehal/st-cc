@@ -4,7 +4,10 @@ import * as path from 'path';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
 import { createComponentTestContent } from '../templates/test';
-import { StencilConfigManager } from '../stencilConfigManager';
+import {
+  addComponentToNewBundle,
+  saveConfigFile
+} from '../stencilConfigManager';
 
 export const COMPONENTS_PATH = 'src/components';
 
@@ -56,12 +59,14 @@ async function addComponentToStencilConfig({
   componentName: string;
   currentDir: string;
 }) {
+  let newStencilConfig;
   const configPath = path.resolve(currentDir, 'stencil.config.js');
-  let stencilConfigManager: StencilConfigManager;
   try {
     const stencilConfig = require(configPath);
-    stencilConfigManager = new StencilConfigManager(stencilConfig);
-    stencilConfigManager.addComponentToNewBundle(componentName);
+    newStencilConfig = addComponentToNewBundle({
+      stencilConfig,
+      componentName
+    });
   } catch (err) {
     throw new Error(
       `Cannot add component ${componentName} to Stencil config because config file ${configPath} could not be loaded`
@@ -69,7 +74,7 @@ async function addComponentToStencilConfig({
   }
 
   try {
-    await stencilConfigManager.writeNewConfig(configPath);
+    await saveConfigFile(configPath, newStencilConfig);
   } catch (error) {
     throw new Error(`Error writing config file: ${error}`);
   }

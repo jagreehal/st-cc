@@ -9,26 +9,27 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const fse = require("fs-extra");
-class StencilConfigManager {
-    constructor(stencilConfig) {
-        this.stencilConfig = stencilConfig;
-        this.bundles = [...stencilConfig.config.bundles];
-    }
-    addComponentToNewBundle(componentName) {
-        this.bundles.push({
-            components: [`${componentName}`]
-        });
-    }
-    createNewConfig() {
-        this.stencilConfig.config = this.stencilConfig.config || {};
-        this.stencilConfig.config.bundles = this.bundles;
-        return JSON.stringify(this.stencilConfig, null, 2);
-    }
-    writeNewConfig(configFile) {
-        return __awaiter(this, void 0, void 0, function* () {
-            return yield fse.outputFile(configFile, this.createNewConfig());
-        });
-    }
+function addComponentToNewBundle({ stencilConfig, componentName }) {
+    stencilConfig.config = stencilConfig.config || {};
+    stencilConfig.config.bundles = stencilConfig.config.bundles || [];
+    stencilConfig.config.bundles.push({
+        components: [`${componentName}`]
+    });
+    return createJsonToConfig(stencilConfig);
 }
-exports.StencilConfigManager = StencilConfigManager;
+exports.addComponentToNewBundle = addComponentToNewBundle;
+function saveConfigFile(configFile, content) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield fse.outputFile(configFile, content);
+    });
+}
+exports.saveConfigFile = saveConfigFile;
+function createJsonToConfig(stencilConfig) {
+    return Object.keys(stencilConfig)
+        .map(key => {
+        return `exports.${key} = ${JSON.stringify(stencilConfig[key])};`;
+    })
+        .join('\n\n');
+}
+exports.createJsonToConfig = createJsonToConfig;
 //# sourceMappingURL=index.js.map

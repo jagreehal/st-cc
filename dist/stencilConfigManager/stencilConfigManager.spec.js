@@ -33,13 +33,13 @@ describe('When using stencil config file manager', () => {
     afterEach(() => __awaiter(this, void 0, void 0, function* () { return yield fse.remove(TEST_DIR); }));
     it('Should be able to add component to bundles', () => __awaiter(this, void 0, void 0, function* () {
         const componentName = 'my-app';
-        const configFile = require(configFilePath);
-        const stencilConfigManager = new index_1.StencilConfigManager(configFile);
-        stencilConfigManager.addComponentToNewBundle('my-app');
-        yield stencilConfigManager.writeNewConfig(configFilePath);
+        const stencilConfig = require(configFilePath);
+        const newConfig = index_1.addComponentToNewBundle({ stencilConfig, componentName });
+        yield index_1.saveConfigFile(configFilePath, newConfig);
         const fileContents = yield fse.readFile(configFilePath, 'utf8');
-        const newConfigFile = require(configFilePath);
-        expect(newConfigFile.config.bundles[1].components[0]).toBe(componentName);
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/new.config.js');
+        const expectedOutput = yield fse.readFile(expectedOutputPath);
+        expect(fileContents).toBe(expectedOutput.toString());
     }));
 });
 //# sourceMappingURL=stencilConfigManager.spec.js.map

@@ -1,26 +1,29 @@
 import * as fse from 'fs-extra';
 
-export class StencilConfigManager {
+export function addComponentToNewBundle({
+  stencilConfig,
+  componentName
+}: {
   stencilConfig: any;
-  bundles: any;
+  componentName: string;
+}) {
+  stencilConfig.config = stencilConfig.config || {};
+  stencilConfig.config.bundles = stencilConfig.config.bundles || [];
+  stencilConfig.config.bundles.push({
+    components: [`${componentName}`]
+  });
 
-  constructor(stencilConfig: any) {
-    this.stencilConfig = stencilConfig;
-    this.bundles = [...stencilConfig.config.bundles];
-  }
+  return createJsonToConfig(stencilConfig);
+}
 
-  addComponentToNewBundle(componentName: string) {
-    this.bundles.push({
-      components: [`${componentName}`]
-    });
-  }
-  createNewConfig() {
-    this.stencilConfig.config = this.stencilConfig.config || {};
-    this.stencilConfig.config.bundles = this.bundles;
-    return JSON.stringify(this.stencilConfig, null, 2);
-  }
+export async function saveConfigFile(configFile: string, content: string) {
+  return await fse.outputFile(configFile, content);
+}
 
-  async writeNewConfig(configFile: string) {
-    return await fse.outputFile(configFile, this.createNewConfig());
-  }
+export function createJsonToConfig(stencilConfig: any) {
+  return Object.keys(stencilConfig)
+    .map(key => {
+      return `exports.${key} = ${JSON.stringify(stencilConfig[key])};`;
+    })
+    .join('\n\n');
 }

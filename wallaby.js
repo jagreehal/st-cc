@@ -6,6 +6,7 @@ module.exports = function(wallaby) {
       'tsconfig.json',
       '!src/**/*.spec.ts',
       'src/**/*.ts',
+      'src/**/expected/*.js',
       'src/**/*.tsx',
       'src/**/*.scss'
     ],

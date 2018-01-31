@@ -1,7 +1,7 @@
 import * as fse from 'fs-extra';
 import * as path from 'path';
 import * as os from 'os';
-import { StencilConfigManager } from './index';
+import { addComponentToNewBundle, saveConfigFile } from './index';
 
 const sampleConfig = `exports.config = {
     bundles: [{ components: ['x-x'] }]
@@ -28,14 +28,20 @@ describe('When using stencil config file manager', () => {
 
   it('Should be able to add component to bundles', async () => {
     const componentName = 'my-app';
-    const configFile = require(configFilePath);
-    const stencilConfigManager = new StencilConfigManager(configFile);
-    stencilConfigManager.addComponentToNewBundle('my-app');
-    await stencilConfigManager.writeNewConfig(configFilePath);
+    const stencilConfig = require(configFilePath);
+
+    const newConfig = addComponentToNewBundle({ stencilConfig, componentName });
+
+    await saveConfigFile(configFilePath, newConfig);
 
     const fileContents = await fse.readFile(configFilePath, 'utf8');
-    const newConfigFile = require(configFilePath);
 
-    expect(newConfigFile.config.bundles[1].components[0]).toBe(componentName);
+    const expectedOutputPath = path.join(
+      __dirname,
+      'tests/expected/new.config.js'
+    );
+    const expectedOutput = await fse.readFile(expectedOutputPath);
+
+    expect(fileContents).toBe(expectedOutput.toString());
   });
 });

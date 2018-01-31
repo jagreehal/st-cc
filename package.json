@@ -1,11 +1,9 @@
 {
   "name": "st-cc",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "Stencil create component cli",
   "preferGlobal": true,
-  "files": [
-    "/dist"
-  ],
+  "files": ["/dist"],
   "bin": {
     "st-cc": "./dist/index.js"
   },
@@ -13,8 +11,10 @@
   "scripts": {
     "prebuild": "rimraf dist",
     "build": "cross-env NODE_ENV=production tsc",
-    "dev": "npm run build && concurrently -k \"npm run watch\" \"npm run nodemon\"",
-    "nodemon": "nodemon --inspect=0.0.0.0:9230  --watch dist --ignore **/*.spec.js dist/index.js",
+    "dev":
+      "npm run build && concurrently -k \"npm run watch\" \"npm run nodemon\"",
+    "nodemon":
+      "nodemon --inspect=0.0.0.0:9230  --watch dist --ignore **/*.spec.js dist/index.js",
     "test": "jest",
     "test-watch": "jest --watch",
     "tsc-watch": "tsc -w"
@@ -47,31 +47,19 @@
     "typescript": "^2.6.2"
   },
   "jest": {
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js"
-    ],
+    "moduleFileExtensions": ["ts", "tsx", "js"],
     "transform": {
       ".(ts|tsx)": "<rootDir>/node_modules/ts-jest/preprocessor.js"
     },
-    "testMatch": [
-      "**/*.spec.(ts|tsx)"
-    ],
+    "testMatch": ["**/*.spec.(ts|tsx)"],
     "testEnvironment": "node",
-    "testPathIgnorePatterns": [
-      "node_modules/",
-      "dist"
-    ],
+    "testPathIgnorePatterns": ["node_modules/", "dist"],
     "coveragePathIgnorePatterns": [
       "node_modules/",
       "dist",
       "**/*.spec.(ts|tsx)"
     ],
-    "coverageReporters": [
-      "lcov",
-      "html"
-    ]
+    "coverageReporters": ["lcov", "html"]
   },
   "engines": {
     "node": ">=6.0.0"
