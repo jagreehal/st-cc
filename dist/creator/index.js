@@ -1,4 +1,12 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 require("source-map-support").install();
 const fse = require("fs-extra");
@@ -7,70 +15,84 @@ const component_1 = require("../templates/component");
 const style_1 = require("../templates/style");
 const test_1 = require("../templates/test");
 const stencilConfigManager_1 = require("../stencilConfigManager");
-async function create({ componentName, createStyleFile = true, createTestFile = true, addToStencilConfig = false, currentDir = process.cwd() }) {
-    const componentPath = path.resolve(currentDir, componentName);
-    const directoryExists = await componentDirectoryExists(componentPath);
-    if (directoryExists) {
-        throw new Error(`A directory already exists for the component ${componentName}`);
-    }
-    await createFolder({ componentPath });
-    await createComponent({ componentName, componentPath });
-    if (createStyleFile) {
-        await createComponentStyleFile({ componentName, componentPath });
-    }
-    if (createTestFile) {
-        await createComponentTestFile({ componentName, componentPath });
-    }
-    if (addToStencilConfig) {
-        await addComponentToStencilConfig({ componentName, currentDir });
-    }
+function create({ componentName, createStyleFile = true, createTestFile = true, addToStencilConfig = false, currentDir = process.cwd() }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const componentPath = path.resolve(currentDir, componentName);
+        const directoryExists = yield componentDirectoryExists(componentPath);
+        if (directoryExists) {
+            throw new Error(`A directory already exists for the component ${componentName}`);
+        }
+        yield createFolder({ componentPath });
+        yield createComponent({ componentName, componentPath });
+        if (createStyleFile) {
+            yield createComponentStyleFile({ componentName, componentPath });
+        }
+        if (createTestFile) {
+            yield createComponentTestFile({ componentName, componentPath });
+        }
+        if (addToStencilConfig) {
+            yield addComponentToStencilConfig({ componentName, currentDir });
+        }
+    });
 }
 exports.create = create;
-async function addComponentToStencilConfig({ componentName, currentDir }) {
-    const configPath = path.resolve(currentDir, "stencil.config.js");
-    let stencilConfigManager;
-    try {
-        const stencilConfig = require(configPath);
-        stencilConfigManager = new stencilConfigManager_1.StencilConfigManager(stencilConfig);
-        stencilConfigManager.addComponentToNewBundle(componentName);
-    }
-    catch (err) {
-        throw new Error(`Cannot add component ${componentName} to Stencil config because config file ${configPath} could not be loaded`);
-    }
-    try {
-        await stencilConfigManager.writeNewConfig(configPath);
-    }
-    catch (error) {
-        throw new Error(`Error writing config file: ${error}`);
-    }
+function addComponentToStencilConfig({ componentName, currentDir }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const configPath = path.resolve(currentDir, "stencil.config.js");
+        let stencilConfigManager;
+        try {
+            const stencilConfig = require(configPath);
+            stencilConfigManager = new stencilConfigManager_1.StencilConfigManager(stencilConfig);
+            stencilConfigManager.addComponentToNewBundle(componentName);
+        }
+        catch (err) {
+            throw new Error(`Cannot add component ${componentName} to Stencil config because config file ${configPath} could not be loaded`);
+        }
+        try {
+            yield stencilConfigManager.writeNewConfig(configPath);
+        }
+        catch (error) {
+            throw new Error(`Error writing config file: ${error}`);
+        }
+    });
 }
-async function componentDirectoryExists(componentName) {
-    return await fse.pathExists(componentName);
+function componentDirectoryExists(componentName) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield fse.pathExists(componentName);
+    });
 }
-async function createFolder({ componentPath }) {
-    return await fse.ensureDir(componentPath);
+function createFolder({ componentPath }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        return yield fse.ensureDir(componentPath);
+    });
 }
 function createComponentFileName(componentName, extension = "tsx") {
     return `${componentName}.${extension}`;
 }
-async function createComponent({ componentName, componentPath }) {
-    const componentContent = component_1.createComponentContent({
-        componentName,
-        styleFile: "scss"
+function createComponent({ componentName, componentPath }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const componentContent = component_1.createComponentContent({
+            componentName,
+            styleFile: "scss"
+        });
+        return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName)), componentContent);
     });
-    return await fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName)), componentContent);
 }
-async function createComponentStyleFile({ componentName, componentPath, styleExtension = "scss" }) {
-    const componentStyleContent = style_1.createStyleContent({
-        componentName
+function createComponentStyleFile({ componentName, componentPath, styleExtension = "scss" }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const componentStyleContent = style_1.createStyleContent({
+            componentName
+        });
+        return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName, styleExtension)), componentStyleContent);
     });
-    return await fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName, styleExtension)), componentStyleContent);
 }
-async function createComponentTestFile({ componentName, componentPath, testPattern = "spec" }) {
-    const componentTestContent = test_1.createComponentTestContent({
-        componentName
+function createComponentTestFile({ componentName, componentPath, testPattern = "spec" }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const componentTestContent = test_1.createComponentTestContent({
+            componentName
+        });
+        const testFileName = `${componentName}.${testPattern}`;
+        return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(testFileName)), componentTestContent);
     });
-    const testFileName = `${componentName}.${testPattern}`;
-    return await fse.writeFile(path.resolve(componentPath, createComponentFileName(testFileName)), componentTestContent);
 }
 //# sourceMappingURL=index.js.map
