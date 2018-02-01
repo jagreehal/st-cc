@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-function createStyleContent({ componentName }) {
-    return `${componentName} {
+function createStyleContent({ componentName, isShadow = false }) {
+    return `${isShadow ? ':host' : componentName} {
+  display: block; /* by default, custom elements are display: inline */
 }
 `;
 }

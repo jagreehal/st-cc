@@ -1,4 +1,4 @@
-import { convertComponentNameToComponentClassName } from '../utiils';
+import { convertComponentNameToComponentClassName } from '../utils';
 
 type CreateComponentArgs = {
   componentName: string;
@@ -11,7 +11,7 @@ export function createComponentTestContent({
     componentName
   );
 
-  return `import { render } from '@stencil/core/testing';
+  return `import { render, flush } from '@stencil/core/testing';
 import { ${componentClassName} } from './${componentName}';
 
 describe('${componentName}', () => {
@@ -20,11 +20,19 @@ describe('${componentName}', () => {
   });
 
   describe('rendering', () => {
+    let element;
     beforeEach(async () => {
-      await render({
+      element = await render({
         components: [${componentClassName}],
         html: '<${componentName}></${componentName}>'
       });
+    });
+
+    it('should work with both the first and the last name', async () => {
+      element.first = 'Peter';
+      element.last = 'Parker';
+      await flush(element);
+      expect(element.textContent).toEqual('Hello, my name is Peter Parker');
     });
   });
 });

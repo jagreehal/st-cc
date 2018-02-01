@@ -1,6 +1,7 @@
 require('source-map-support').install();
 import * as fse from 'fs-extra';
 import * as path from 'path';
+import { TypeAnswers } from '../questions';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
 import { createComponentTestContent } from '../templates/test';
@@ -11,21 +12,14 @@ import {
 
 export const COMPONENTS_PATH = 'src/components';
 
-export interface CreateArgs {
-  currentDir: string;
-  componentName: string;
-  createStyleFile: boolean;
-  createTestFile: boolean;
-  addToStencilConfig: boolean;
-}
-
 export async function create({
   componentName,
+  isShadow = false,
   createStyleFile = true,
   createTestFile = true,
   addToStencilConfig = false,
   currentDir = process.cwd()
-}: CreateArgs) {
+}: TypeAnswers) {
   const componentsPath = path.join(currentDir, COMPONENTS_PATH);
   const componentPath = path.resolve(componentsPath, componentName);
   const directoryExists = await componentDirectoryExists(componentPath);
@@ -37,10 +31,10 @@ export async function create({
 
   await createFolder({ componentPath });
 
-  await createComponent({ componentName, componentPath });
+  await createComponent({ componentName, componentPath, isShadow });
 
   if (createStyleFile) {
-    await createComponentStyleFile({ componentName, componentPath });
+    await createComponentStyleFile({ componentName, componentPath, isShadow });
   }
 
   if (createTestFile) {
@@ -56,9 +50,9 @@ async function addComponentToStencilConfig({
   componentName,
   currentDir
 }: {
-  componentName: string;
-  currentDir: string;
-}) {
+    componentName: string;
+    currentDir: string;
+  }) {
   let newStencilConfig;
   const configPath = path.resolve(currentDir, 'stencil.config.js');
   try {
@@ -96,13 +90,16 @@ function createComponentFileName(
 
 async function createComponent({
   componentName,
-  componentPath
+  componentPath,
+  isShadow
 }: {
-  componentName: string;
-  componentPath: string;
-}) {
+    componentName: string;
+    componentPath: string;
+    isShadow: boolean;
+  }) {
   const componentContent = createComponentContent({
     componentName,
+    isShadow,
     styleFile: 'scss'
   });
 
@@ -115,14 +112,17 @@ async function createComponent({
 async function createComponentStyleFile({
   componentName,
   componentPath,
+  isShadow,
   styleExtension = 'scss'
 }: {
-  componentName: string;
-  componentPath: string;
-  styleExtension?: string;
-}) {
+    componentName: string;
+    componentPath: string;
+    isShadow: boolean;
+    styleExtension?: string;
+  }) {
   const componentStyleContent = createStyleContent({
-    componentName
+    componentName,
+    isShadow
   });
 
   return await fse.writeFile(
@@ -139,10 +139,10 @@ async function createComponentTestFile({
   componentPath,
   testPattern = 'spec'
 }: {
-  componentName: string;
-  componentPath: string;
-  testPattern?: string;
-}) {
+    componentName: string;
+    componentPath: string;
+    testPattern?: string;
+  }) {
   const componentTestContent = createComponentTestContent({
     componentName
   });

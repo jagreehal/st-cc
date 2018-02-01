@@ -16,7 +16,7 @@ const style_1 = require("../templates/style");
 const test_1 = require("../templates/test");
 const stencilConfigManager_1 = require("../stencilConfigManager");
 exports.COMPONENTS_PATH = 'src/components';
-function create({ componentName, createStyleFile = true, createTestFile = true, addToStencilConfig = false, currentDir = process.cwd() }) {
+function create({ componentName, isShadow = false, createStyleFile = true, createTestFile = true, addToStencilConfig = false, currentDir = process.cwd() }) {
     return __awaiter(this, void 0, void 0, function* () {
         const componentsPath = path.join(currentDir, exports.COMPONENTS_PATH);
         const componentPath = path.resolve(componentsPath, componentName);
@@ -25,9 +25,9 @@ function create({ componentName, createStyleFile = true, createTestFile = true, 
             throw new Error(`A directory already exists for the component ${componentName}`);
         }
         yield createFolder({ componentPath });
-        yield createComponent({ componentName, componentPath });
+        yield createComponent({ componentName, componentPath, isShadow });
         if (createStyleFile) {
-            yield createComponentStyleFile({ componentName, componentPath });
+            yield createComponentStyleFile({ componentName, componentPath, isShadow });
         }
         if (createTestFile) {
             yield createComponentTestFile({ componentName, componentPath });
@@ -73,19 +73,21 @@ function createFolder({ componentPath }) {
 function createComponentFileName(componentName, extension = 'tsx') {
     return `${componentName}.${extension}`;
 }
-function createComponent({ componentName, componentPath }) {
+function createComponent({ componentName, componentPath, isShadow }) {
     return __awaiter(this, void 0, void 0, function* () {
         const componentContent = component_1.createComponentContent({
             componentName,
+            isShadow,
             styleFile: 'scss'
         });
         return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName)), componentContent);
     });
 }
-function createComponentStyleFile({ componentName, componentPath, styleExtension = 'scss' }) {
+function createComponentStyleFile({ componentName, componentPath, isShadow, styleExtension = 'scss' }) {
     return __awaiter(this, void 0, void 0, function* () {
         const componentStyleContent = style_1.createStyleContent({
-            componentName
+            componentName,
+            isShadow
         });
         return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(componentName, styleExtension)), componentStyleContent);
     });

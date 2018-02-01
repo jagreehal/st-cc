@@ -16,4 +16,19 @@ describe('When building content for style', () => {
 
     expect(result).toBe(expectedOutput.toString());
   });
+
+  it('Can build content for shadow component style file', async () => {
+    const result = createStyleContent({
+      componentName: 'my-app',
+      isShadow: true
+    });
+
+    const expectedOutputPath = path.join(
+      __dirname,
+      'tests/expected/style-shadow.scss'
+    );
+    const expectedOutput = await fse.readFile(expectedOutputPath);
+
+    expect(result).toBe(expectedOutput.toString());
+  });
 });

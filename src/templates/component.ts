@@ -1,30 +1,40 @@
-import { convertComponentNameToComponentClassName } from '../utiils';
+import { convertComponentNameToComponentClassName } from '../utils';
 
 type CreateComponentArgs = {
   componentName: string;
   styleFile?: string;
+  isShadow?: boolean;
 };
 
 export function createComponentContent({
   componentName,
-  styleFile
+  styleFile,
+  isShadow = false
 }: CreateComponentArgs) {
+  const componentTags = [`tag: '${componentName}'`];
+  if (styleFile) {
+    componentTags.push(`styleUrl: '${componentName}.${styleFile}'`);
+  }
+
+  if (isShadow) {
+    componentTags.push(`shadow: true`);
+  }
+
   return `import { Component, Prop } from '@stencil/core';
 
-@Component({${
-    styleFile
-      ? `
-  tag: '${componentName}',
-  styleUrl: '${componentName}.${styleFile}'`
-      : `
-  tag: '${componentName}'`
-  }
+@Component({
+  ${componentTags.join(`,\n  `)}
 })
 export class ${convertComponentNameToComponentClassName(componentName)} {
-  @Prop() name: string;
+  @Prop() first: string;
+  @Prop() last: string;
 
   render() {
-    return <div>My name is {this.name}</div>;
+    return (
+      <div>
+        Hello, my name is {this.first} {this.last}
+      </div>
+    );
   }
 }
 `;

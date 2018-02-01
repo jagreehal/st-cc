@@ -29,4 +29,18 @@ describe('When building content for component', () => {
 
     expect(result).toBe(expectedOutput.toString());
   });
+  it('Can build content for shadow component', async () => {
+    const result = createComponentContent({
+      componentName: 'my-app',
+      styleFile: 'scss',
+      isShadow: true
+    });
+    const expectedOutputPath = path.join(
+      __dirname,
+      'tests/expected/component-shadow.tsx'
+    );
+    const expectedOutput = await fse.readFile(expectedOutputPath);
+
+    expect(result).toBe(expectedOutput.toString());
+  });
 });

@@ -4,9 +4,14 @@ import { Component, Prop } from '@stencil/core';
   tag: 'my-app'
 })
 export class MyApp {
-  @Prop() name: string;
+  @Prop() first: string;
+  @Prop() last: string;
 
   render() {
-    return <div>My name is {this.name}</div>;
+    return (
+      <div>
+        Hello, my name is {this.first} {this.last}
+      </div>
+    );
   }
 }
