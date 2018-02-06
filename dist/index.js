@@ -3,48 +3,42 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const inquirer = require("inquirer");
 const creator_1 = require("./creator");
+const utils_1 = require("./utils");
+const questions_1 = require("./questions");
 const chalk = require('chalk');
 console.log(chalk.blue(`Stencil component creator`));
-const questions = [
-    {
-        type: 'input',
-        name: 'componentName',
-        default: 'my-app',
-        message: 'What is name of the component you want to create?',
-        validate: (value) => {
-            const pass = value.match(/^(?!-)(?=.*-)([a-z-]+){2,}(?:[^-])$/g);
-            if (pass) {
-                return true;
-            }
-            return 'Please enter a component name with at least one dash e.g. my-app';
-        }
-    },
-    {
-        type: 'confirm',
-        name: 'createStyleFile',
-        message: 'Create style file (.scss)?',
-        default: true
-    },
-    {
-        type: 'confirm',
-        name: 'createTestFile',
-        message: 'Create test file?',
-        default: true
-    },
-    {
-        type: 'confirm',
-        name: 'addToStencilConfig',
-        message: 'Add component to stencil.config? (Warning this may reformat your stencil.config.js file)',
-        default: false
+const componentNameFromArgs = process.argv[2];
+const hasProvidedComponentName = componentNameFromArgs !== undefined;
+let welcomeMessage;
+if (hasProvidedComponentName) {
+    welcomeMessage = `Creating Stencil component ${componentNameFromArgs}`;
+}
+else {
+    welcomeMessage = `Stencil component creator`;
+}
+console.log(chalk.blue(welcomeMessage));
+if (hasProvidedComponentName) {
+    const validationResult = utils_1.validateComponentName(componentNameFromArgs);
+    if (validationResult.SUCCESS === false) {
+        console.error(chalk.red(validationResult.errorMessage));
+        process.exit(1);
     }
-];
-inquirer.prompt(questions).then((answers) => {
-    creator_1.create(answers)
-        .then(() => {
-        console.log(chalk.green('All done!'));
-    })
-        .catch((e) => {
-        console.log(chalk.red(`On no: ${e}`));
-    });
+}
+const questions = questions_1.getQuestions({
+    hasProvidedComponentName
+});
+inquirer
+    .prompt(questions)
+    .then((answers) => {
+    if (hasProvidedComponentName) {
+        answers.componentName = componentNameFromArgs;
+    }
+    return creator_1.create(answers);
+})
+    .then(() => {
+    console.log(chalk.green('All done!'));
+})
+    .catch((e) => {
+    console.error(chalk.red(`${e}`));
 });
 //# sourceMappingURL=index.js.map

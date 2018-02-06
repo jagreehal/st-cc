@@ -20,5 +20,14 @@ describe('When building content for style', () => {
         const expectedOutput = yield fse.readFile(expectedOutputPath);
         expect(result).toBe(expectedOutput.toString());
     }));
+    it('Can build content for shadow component style file', () => __awaiter(this, void 0, void 0, function* () {
+        const result = style_1.createStyleContent({
+            componentName: 'my-app',
+            isShadow: true
+        });
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/style-shadow.scss');
+        const expectedOutput = yield fse.readFile(expectedOutputPath);
+        expect(result).toBe(expectedOutput.toString());
+    }));
 });
 //# sourceMappingURL=style.spec.js.map

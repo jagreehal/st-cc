@@ -52,7 +52,8 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: false,
       createTestFile: false,
-      addToStencilConfig: false
+      addToStencilConfig: false,
+      isShadow: false
     });
 
     expect(await fse.pathExists(componentPath)).toBeTruthy();
@@ -67,7 +68,8 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: true,
       createTestFile: false,
-      addToStencilConfig: false
+      addToStencilConfig: false,
+      isShadow: false
     });
 
     expect(await fse.pathExists(componentPath)).toBeTruthy();
@@ -82,7 +84,8 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: true,
       createTestFile: true,
-      addToStencilConfig: false
+      addToStencilConfig: false,
+      isShadow: false
     });
 
     expect(await fse.pathExists(componentPath)).toBeTruthy();
