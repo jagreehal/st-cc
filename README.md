@@ -21,3 +21,8 @@ or use npx
 ```bash
 npx st-cc
 ```
+## You can also provide component name e.g. 
+
+```bash
+st-cc my-app
+```
