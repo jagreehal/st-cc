@@ -52,7 +52,6 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: false,
       createTestFile: false,
-      addToStencilConfig: false,
       isShadow: false
     });
 
@@ -68,7 +67,6 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: true,
       createTestFile: false,
-      addToStencilConfig: false,
       isShadow: false
     });
 
@@ -84,7 +82,6 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       createStyleFile: true,
       createTestFile: true,
-      addToStencilConfig: false,
       isShadow: false
     });
 

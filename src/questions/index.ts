@@ -2,11 +2,10 @@ import { validateComponentName } from '../utils';
 
 export type TypeAnswers = {
   currentDir: string;
-  componentName: string;
+  componentName?: string;
   isShadow: boolean;
   createStyleFile: boolean;
   createTestFile: boolean;
-  addToStencilConfig: boolean;
 }
 
 export const QUESTIONS = [
@@ -40,13 +39,6 @@ export const QUESTIONS = [
     name: 'createTestFile',
     message: 'Create test file?',
     default: true
-  },
-  {
-    type: 'confirm',
-    name: 'addToStencilConfig',
-    message:
-      'Add component to stencil.config? (Warning this may reformat your stencil.config.js file)',
-    default: false
   }
 ];
 

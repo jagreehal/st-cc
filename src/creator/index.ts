@@ -5,10 +5,6 @@ import { TypeAnswers } from '../questions';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
 import { createComponentTestContent } from '../templates/test';
-import {
-  addComponentToNewBundle,
-  saveConfigFile
-} from '../stencilConfigManager';
 
 export const COMPONENTS_PATH = 'src/components';
 
@@ -17,7 +13,6 @@ export async function create({
   isShadow = false,
   createStyleFile = true,
   createTestFile = true,
-  addToStencilConfig = false,
   currentDir = process.cwd()
 }: TypeAnswers) {
   const componentsPath = path.join(currentDir, COMPONENTS_PATH);
@@ -41,37 +36,6 @@ export async function create({
     await createComponentTestFile({ componentName, componentPath });
   }
 
-  if (addToStencilConfig) {
-    await addComponentToStencilConfig({ componentName, currentDir });
-  }
-}
-
-async function addComponentToStencilConfig({
-  componentName,
-  currentDir
-}: {
-    componentName: string;
-    currentDir: string;
-  }) {
-  let newStencilConfig;
-  const configPath = path.resolve(currentDir, 'stencil.config.js');
-  try {
-    const stencilConfig = require(configPath);
-    newStencilConfig = addComponentToNewBundle({
-      stencilConfig,
-      componentName
-    });
-  } catch (err) {
-    throw new Error(
-      `Cannot add component ${componentName} to Stencil config because config file ${configPath} could not be loaded`
-    );
-  }
-
-  try {
-    await saveConfigFile(configPath, newStencilConfig);
-  } catch (error) {
-    throw new Error(`Error writing config file: ${error}`);
-  }
 }
 
 async function componentDirectoryExists(componentName: string) {

@@ -16,7 +16,7 @@ describe('${componentName}', () => {
     beforeEach(async () => {
       element = await render({
         components: [${componentClassName}],
-        html: '<${componentName}><${componentName}>'
+        html: '<${componentName}></${componentName}>'
       });
     });
 

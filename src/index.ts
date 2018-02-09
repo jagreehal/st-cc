@@ -7,8 +7,6 @@ import { TypeAnswers, getQuestions } from './questions';
 
 const chalk = require('chalk');
 
-console.log(chalk.blue(`Stencil component creator`));
-
 const componentNameFromArgs = process.argv[2];
 const hasProvidedComponentName = componentNameFromArgs !== undefined;
 
@@ -32,17 +30,20 @@ const questions = getQuestions({
   hasProvidedComponentName
 });
 
-inquirer
-  .prompt(questions)
-  .then((answers: TypeAnswers) => {
+async function run() {
+  try {
+    const answers = await inquirer.prompt(questions) as TypeAnswers;
+
     if (hasProvidedComponentName) {
       answers.componentName = componentNameFromArgs;
     }
-    return create(answers);
-  })
-  .then(() => {
-    console.log(chalk.green('All done!'));
-  })
-  .catch((e: any) => {
-    console.error(chalk.red(`${e}`));
-  });
+    console.log(chalk.green(`🚀 Stencil component ${answers.componentName} created!`));
+
+    await create(answers);
+  } catch (error) {
+    console.error(chalk.red(`${error}`));
+  }
+
+}
+
+run();

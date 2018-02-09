@@ -14,9 +14,8 @@ const path = require("path");
 const component_1 = require("../templates/component");
 const style_1 = require("../templates/style");
 const test_1 = require("../templates/test");
-const stencilConfigManager_1 = require("../stencilConfigManager");
 exports.COMPONENTS_PATH = 'src/components';
-function create({ componentName, isShadow = false, createStyleFile = true, createTestFile = true, addToStencilConfig = false, currentDir = process.cwd() }) {
+function create({ componentName, isShadow = false, createStyleFile = true, createTestFile = true, currentDir = process.cwd() }) {
     return __awaiter(this, void 0, void 0, function* () {
         const componentsPath = path.join(currentDir, exports.COMPONENTS_PATH);
         const componentPath = path.resolve(componentsPath, componentName);
@@ -32,34 +31,9 @@ function create({ componentName, isShadow = false, createStyleFile = true, creat
         if (createTestFile) {
             yield createComponentTestFile({ componentName, componentPath });
         }
-        if (addToStencilConfig) {
-            yield addComponentToStencilConfig({ componentName, currentDir });
-        }
     });
 }
 exports.create = create;
-function addComponentToStencilConfig({ componentName, currentDir }) {
-    return __awaiter(this, void 0, void 0, function* () {
-        let newStencilConfig;
-        const configPath = path.resolve(currentDir, 'stencil.config.js');
-        try {
-            const stencilConfig = require(configPath);
-            newStencilConfig = stencilConfigManager_1.addComponentToNewBundle({
-                stencilConfig,
-                componentName
-            });
-        }
-        catch (err) {
-            throw new Error(`Cannot add component ${componentName} to Stencil config because config file ${configPath} could not be loaded`);
-        }
-        try {
-            yield stencilConfigManager_1.saveConfigFile(configPath, newStencilConfig);
-        }
-        catch (error) {
-            throw new Error(`Error writing config file: ${error}`);
-        }
-    });
-}
 function componentDirectoryExists(componentName) {
     return __awaiter(this, void 0, void 0, function* () {
         return yield fse.pathExists(componentName);
