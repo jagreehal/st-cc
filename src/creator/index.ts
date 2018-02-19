@@ -5,13 +5,14 @@ import { TypeAnswers } from '../questions';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
 import { createComponentTestContent } from '../templates/test';
+import { styleExtension } from '../types';
 
 export const COMPONENTS_PATH = 'src/components';
 
 export async function create({
   componentName,
   isShadow = false,
-  createStyleFile = true,
+  styleExtension = 'none',
   createTestFile = true,
   currentDir = process.cwd()
 }: TypeAnswers) {
@@ -26,10 +27,10 @@ export async function create({
 
   await createFolder({ componentPath });
 
-  await createComponent({ componentName, componentPath, isShadow });
+  await createComponent({ componentName, componentPath, isShadow, styleExtension });
 
-  if (createStyleFile) {
-    await createComponentStyleFile({ componentName, componentPath, isShadow });
+  if (styleExtension !== 'none') {
+    await createComponentStyleFile({ componentName, componentPath, isShadow, styleExtension });
   }
 
   if (createTestFile) {
@@ -55,16 +56,18 @@ function createComponentFileName(
 async function createComponent({
   componentName,
   componentPath,
-  isShadow
+  isShadow,
+  styleExtension
 }: {
     componentName: string;
     componentPath: string;
     isShadow: boolean;
+    styleExtension: styleExtension
   }) {
   const componentContent = createComponentContent({
     componentName,
     isShadow,
-    styleFile: 'scss'
+    styleExtension
   });
 
   return await fse.writeFile(
@@ -77,12 +80,12 @@ async function createComponentStyleFile({
   componentName,
   componentPath,
   isShadow,
-  styleExtension = 'scss'
+  styleExtension
 }: {
     componentName: string;
     componentPath: string;
     isShadow: boolean;
-    styleExtension?: string;
+    styleExtension: string;
   }) {
   const componentStyleContent = createStyleContent({
     componentName,

@@ -1,0 +1,1 @@
+export type styleExtension = 'scss' | 'css' | 'none';

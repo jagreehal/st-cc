@@ -16,7 +16,7 @@ describe('When building content for style', () => {
         const result = style_1.createStyleContent({
             componentName: 'my-app'
         });
-        const expectedOutputPath = path.join(__dirname, 'tests/expected/style.scss');
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/style.css');
         const expectedOutput = yield fse.readFile(expectedOutputPath);
         expect(result).toBe(expectedOutput.toString());
     }));
@@ -25,7 +25,7 @@ describe('When building content for style', () => {
             componentName: 'my-app',
             isShadow: true
         });
-        const expectedOutputPath = path.join(__dirname, 'tests/expected/style-shadow.scss');
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/style-shadow.css');
         const expectedOutput = yield fse.readFile(expectedOutputPath);
         expect(result).toBe(expectedOutput.toString());
     }));

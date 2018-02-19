@@ -10,7 +10,7 @@ describe('When building content for style', () => {
 
     const expectedOutputPath = path.join(
       __dirname,
-      'tests/expected/style.scss'
+      'tests/expected/style.css'
     );
     const expectedOutput = await fse.readFile(expectedOutputPath);
 
@@ -25,10 +25,11 @@ describe('When building content for style', () => {
 
     const expectedOutputPath = path.join(
       __dirname,
-      'tests/expected/style-shadow.scss'
+      'tests/expected/style-shadow.css'
     );
     const expectedOutput = await fse.readFile(expectedOutputPath);
 
     expect(result).toBe(expectedOutput.toString());
+
   });
 });

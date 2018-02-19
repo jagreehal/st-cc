@@ -1,10 +1,10 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
-function createComponentContent({ componentName, styleFile, isShadow = false }) {
+function createComponentContent({ componentName, styleExtension = 'none', isShadow = false }) {
     const componentTags = [`tag: '${componentName}'`];
-    if (styleFile) {
-        componentTags.push(`styleUrl: '${componentName}.${styleFile}'`);
+    if (styleExtension !== 'none') {
+        componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
     }
     if (isShadow) {
         componentTags.push(`shadow: true`);

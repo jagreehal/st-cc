@@ -33,7 +33,7 @@ describe('When running stencil-cli', () => {
       TEST_DIR,
       COMPONENTS_PATH,
       COMPONENT_NAME,
-      `${COMPONENT_NAME}.scss`
+      `${COMPONENT_NAME}.css`
     );
 
     componentTestPath = buildPath(
@@ -45,12 +45,12 @@ describe('When running stencil-cli', () => {
   });
   afterEach(async () => await fse.remove(TEST_DIR));
 
-  it('can create component', async () => {
+  it('can create component without style or test', async () => {
     const componentName = 'my-app';
     await create({
       componentName,
       currentDir: TEST_DIR,
-      createStyleFile: false,
+      styleExtension: 'none',
       createTestFile: false,
       isShadow: false
     });
@@ -65,7 +65,7 @@ describe('When running stencil-cli', () => {
     await create({
       componentName,
       currentDir: TEST_DIR,
-      createStyleFile: true,
+      styleExtension: 'css',
       createTestFile: false,
       isShadow: false
     });
@@ -80,7 +80,7 @@ describe('When running stencil-cli', () => {
     await create({
       componentName,
       currentDir: TEST_DIR,
-      createStyleFile: true,
+      styleExtension: 'css',
       createTestFile: true,
       isShadow: false
     });
