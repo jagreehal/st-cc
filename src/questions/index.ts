@@ -1,10 +1,11 @@
 import { validateComponentName } from '../utils';
+import { styleExtension } from '../types';
 
 export type TypeAnswers = {
   currentDir: string;
   componentName?: string;
   isShadow: boolean;
-  createStyleFile: boolean;
+  styleExtension: styleExtension,
   createTestFile: boolean;
 }
 
@@ -29,10 +30,14 @@ export const QUESTIONS = [
     default: false
   },
   {
-    type: 'confirm',
-    name: 'createStyleFile',
-    message: 'Create style file (.scss)?',
-    default: true
+    type: 'list',
+    name: 'styleExtension',
+    default: 'css',
+    message: 'What type of style file?',
+    choices: ['scss', 'css', 'none'],
+    filter(val: string) {
+      return val.toLowerCase();
+    }
   },
   {
     type: 'confirm',

@@ -1,19 +1,20 @@
 import { convertComponentNameToComponentClassName } from '../utils';
+import { styleExtension } from '../types';
 
 type CreateComponentArgs = {
   componentName: string;
-  styleFile?: string;
+  styleExtension?: styleExtension;
   isShadow?: boolean;
 };
 
 export function createComponentContent({
   componentName,
-  styleFile,
+  styleExtension = 'none',
   isShadow = false
 }: CreateComponentArgs) {
   const componentTags = [`tag: '${componentName}'`];
-  if (styleFile) {
-    componentTags.push(`styleUrl: '${componentName}.${styleFile}'`);
+  if (styleExtension !== 'none') {
+    componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
   }
 
   if (isShadow) {

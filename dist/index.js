@@ -18,7 +18,7 @@ const componentNameFromArgs = process.argv[2];
 const hasProvidedComponentName = componentNameFromArgs !== undefined;
 let welcomeMessage;
 if (hasProvidedComponentName) {
-    welcomeMessage = `💖 Creating Stencil component ${componentNameFromArgs}`;
+    welcomeMessage = `Creating Stencil component ${componentNameFromArgs}`;
 }
 else {
     welcomeMessage = `Stencil component creator`;

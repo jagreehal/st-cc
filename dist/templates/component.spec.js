@@ -12,18 +12,28 @@ const fse = require("fs-extra");
 const path = require("path");
 const component_1 = require("./component");
 describe('When building content for component', () => {
-    it('Can build content for component with style', () => __awaiter(this, void 0, void 0, function* () {
+    it('Can build content for component with css', () => __awaiter(this, void 0, void 0, function* () {
         const result = component_1.createComponentContent({
             componentName: 'my-app',
-            styleFile: 'scss'
+            styleExtension: 'css'
         });
-        const expectedOutputPath = path.join(__dirname, 'tests/expected/component-with-style.tsx');
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/component-with-css.tsx');
+        const expectedOutput = yield fse.readFile(expectedOutputPath);
+        expect(result).toBe(expectedOutput.toString());
+    }));
+    it('Can build content for component with scss', () => __awaiter(this, void 0, void 0, function* () {
+        const result = component_1.createComponentContent({
+            componentName: 'my-app',
+            styleExtension: 'scss'
+        });
+        const expectedOutputPath = path.join(__dirname, 'tests/expected/component-with-scss.tsx');
         const expectedOutput = yield fse.readFile(expectedOutputPath);
         expect(result).toBe(expectedOutput.toString());
     }));
     it('Can build content for component without style', () => __awaiter(this, void 0, void 0, function* () {
         const result = component_1.createComponentContent({
-            componentName: 'my-app'
+            componentName: 'my-app',
+            styleExtension: 'none'
         });
         const expectedOutputPath = path.join(__dirname, 'tests/expected/component-without-style.tsx');
         const expectedOutput = yield fse.readFile(expectedOutputPath);
@@ -32,7 +42,6 @@ describe('When building content for component', () => {
     it('Can build content for shadow component', () => __awaiter(this, void 0, void 0, function* () {
         const result = component_1.createComponentContent({
             componentName: 'my-app',
-            styleFile: 'scss',
             isShadow: true
         });
         const expectedOutputPath = path.join(__dirname, 'tests/expected/component-shadow.tsx');
