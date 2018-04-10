@@ -1,4 +1,4 @@
-import { render, flush } from '@stencil/core/testing';
+import { TestWindow } from '@stencil/core/testing';
 import { MyApp } from './my-app';
 
 describe('my-app', () => {
@@ -8,8 +8,11 @@ describe('my-app', () => {
 
   describe('rendering', () => {
     let element;
+    let window;
+
     beforeEach(async () => {
-      element = await render({
+      window = new TestWindow();
+      element = await window.load({
         components: [MyApp],
         html: '<my-app></my-app>'
       });
@@ -18,7 +21,7 @@ describe('my-app', () => {
     it('should work with both the first and the last name', async () => {
       element.first = 'Peter';
       element.last = 'Parker';
-      await flush(element);
+      await window.flush();
       expect(element.textContent).toEqual('Hello, my name is Peter Parker');
     });
   });

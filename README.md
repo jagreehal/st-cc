@@ -26,3 +26,7 @@ npx st-cc
 ```bash
 st-cc my-app
 ```
+
+## If you're using Stencil 0.7.18 or earlier
+
+use st-cc@0.6.2
