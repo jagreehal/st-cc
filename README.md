@@ -1,5 +1,7 @@
 ### Stencil Create Component
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/jagreehal/st-cc.svg)](https://greenkeeper.io/)
+
 cli to create Stencil components in your current working directory.
 
 ## This is until I (or somebody else) submits a PR to for Stencil to provide this natively.
