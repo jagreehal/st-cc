@@ -7,6 +7,7 @@ export type TypeAnswers = {
   isShadow: boolean;
   styleExtension: styleExtension,
   createTestFile: boolean;
+  createStoryFile: boolean;
 }
 
 export const QUESTIONS = [
@@ -43,6 +44,12 @@ export const QUESTIONS = [
     type: 'confirm',
     name: 'createTestFile',
     message: 'Create test file?',
+    default: true
+  },
+  {
+    type: 'confirm',
+    name: 'createStoryFile',
+    message: 'Create storybook file?',
     default: true
   }
 ];

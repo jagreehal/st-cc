@@ -5,6 +5,7 @@ import { TypeAnswers } from '../questions';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
 import { createComponentTestContent } from '../templates/test';
+import { createComponentStoryContent } from '../templates/story';
 import { styleExtension } from '../types';
 
 export const COMPONENTS_PATH = 'src/components';
@@ -14,6 +15,7 @@ export async function create({
   isShadow = false,
   styleExtension = 'none',
   createTestFile = true,
+  createStoryFile = true,
   currentDir = process.cwd()
 }: TypeAnswers) {
   const componentsPath = path.join(currentDir, COMPONENTS_PATH);
@@ -36,6 +38,11 @@ export async function create({
   if (createTestFile) {
     await createComponentTestFile({ componentName, componentPath });
   }
+
+  if (createStoryFile) {
+    await createComponentStoryFile({ componentName, componentPath });
+  }
+
 
 }
 
@@ -120,3 +127,22 @@ async function createComponentTestFile({
     componentTestContent
   );
 }
+
+async function createComponentStoryFile({
+  componentName,
+  componentPath,
+}: {
+    componentName: string;
+    componentPath: string;
+  }) {
+  const componentStoryContent = createComponentStoryContent({
+    componentName
+  });
+
+  const storyFileName = `${componentName}.stories`;
+  return await fse.writeFile(
+    path.resolve(componentPath, createComponentFileName(storyFileName)),
+    componentStoryContent
+  );
+}
+
