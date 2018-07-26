@@ -14,8 +14,9 @@ const path = require("path");
 const component_1 = require("../templates/component");
 const style_1 = require("../templates/style");
 const test_1 = require("../templates/test");
+const story_1 = require("../templates/story");
 exports.COMPONENTS_PATH = 'src/components';
-function create({ componentName, isShadow = false, styleExtension = 'none', createTestFile = true, currentDir = process.cwd() }) {
+function create({ componentName, isShadow = false, styleExtension = 'none', createTestFile = true, createStoryFile = true, currentDir = process.cwd() }) {
     return __awaiter(this, void 0, void 0, function* () {
         const componentsPath = path.join(currentDir, exports.COMPONENTS_PATH);
         const componentPath = path.resolve(componentsPath, componentName);
@@ -30,6 +31,9 @@ function create({ componentName, isShadow = false, styleExtension = 'none', crea
         }
         if (createTestFile) {
             yield createComponentTestFile({ componentName, componentPath });
+        }
+        if (createStoryFile) {
+            yield createComponentStoryFile({ componentName, componentPath });
         }
     });
 }
@@ -73,6 +77,15 @@ function createComponentTestFile({ componentName, componentPath, testPattern = '
         });
         const testFileName = `${componentName}.${testPattern}`;
         return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(testFileName)), componentTestContent);
+    });
+}
+function createComponentStoryFile({ componentName, componentPath, }) {
+    return __awaiter(this, void 0, void 0, function* () {
+        const componentStoryContent = story_1.createComponentStoryContent({
+            componentName
+        });
+        const storyFileName = `${componentName}.stories`;
+        return yield fse.writeFile(path.resolve(componentPath, createComponentFileName(storyFileName)), componentStoryContent);
     });
 }
 //# sourceMappingURL=index.js.map

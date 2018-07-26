@@ -18,6 +18,7 @@ describe('When running stencil-cli', () => {
   let componentPath: string;
   let componentStylePath: string;
   let componentTestPath: string;
+  let componentStoryPath: string;
 
   beforeEach(async () => {
     TEST_DIR = path.join(os.tmpdir(), 'stencil-cli', 'integration');
@@ -42,6 +43,15 @@ describe('When running stencil-cli', () => {
       COMPONENT_NAME,
       `${COMPONENT_NAME}.spec.tsx`
     );
+
+    componentStoryPath = buildPath(
+      TEST_DIR,
+      COMPONENTS_PATH,
+      COMPONENT_NAME,
+      `${COMPONENT_NAME}.story.tsx`
+    );
+
+    console.log('componentStoryPath = ', componentStoryPath)
   });
   afterEach(async () => await fse.remove(TEST_DIR));
 
@@ -52,6 +62,7 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       styleExtension: 'none',
       createTestFile: false,
+      createStoryFile: false,
       isShadow: false
     });
 
@@ -67,6 +78,7 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       styleExtension: 'css',
       createTestFile: false,
+      createStoryFile: false,
       isShadow: false
     });
 
@@ -82,6 +94,7 @@ describe('When running stencil-cli', () => {
       currentDir: TEST_DIR,
       styleExtension: 'css',
       createTestFile: true,
+      createStoryFile: false,
       isShadow: false
     });
 
@@ -89,4 +102,22 @@ describe('When running stencil-cli', () => {
     expect(await fse.pathExists(componentStylePath)).toBeTruthy();
     expect(await fse.pathExists(componentTestPath)).toBeTruthy();
   });
+
+  it('can create component with style and story', async () => {
+    const componentName = 'my-app';
+    await create({
+      componentName,
+      currentDir: TEST_DIR,
+      styleExtension: 'css',
+      createTestFile: false,
+      createStoryFile: true,
+      isShadow: false
+    });
+
+    expect(await fse.pathExists(componentPath)).toBeTruthy();
+    expect(await fse.pathExists(componentStylePath)).toBeTruthy();
+    expect(await fse.pathExists(componentTestPath)).toBeFalsy();
+    expect(await fse.pathExists(componentStoryPath)).toBeTruthy();
+  });
+
 });
