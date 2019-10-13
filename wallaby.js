@@ -8,9 +8,10 @@ module.exports = function(wallaby) {
       'src/**/*.ts',
       'src/**/expected/*.js',
       'src/**/*.tsx',
-      'src/**/*.scss'
+      'src/**/*.scss',
+      'src/**/*.css'
     ],
-    tests: ['src/**/*.spec.ts'],
+    tests: ['!src/templates/tests/expected/*.spec.ts', 'src/**/*.spec.ts'],
     env: {
       type: 'node'
     },

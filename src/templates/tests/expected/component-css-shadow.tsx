@@ -1,10 +1,11 @@
 import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'component-with-scss',
-  styleUrl: './component-with-scss.scss'
+  tag: 'component-css-shadow',
+  styleUrl: './component-css-shadow.css',
+  shadow: true
 })
-export class ComponentWithScss {
+export class ComponentCssShadow {
   @Prop() first: string;
   @Prop() last: string;
 

@@ -1,17 +1,21 @@
+import { styleType } from './../types/index';
 require('source-map-support').install();
-import * as fse from 'fs-extra';
-import * as path from 'path';
+import fsExtra from 'fs-extra';
+import path from 'path';
 import { TypeAnswers } from '../questions';
 import { createComponentContent } from '../templates/component';
 import { createStyleContent } from '../templates/style';
-import { createComponentTestContent } from '../templates/test';
+import {
+  createShadowComponentUnitTest,
+  createComponentUnitTest
+} from '../templates/test';
 import { styleExtension } from '../types';
 
 export const COMPONENTS_PATH = 'src/components';
 
 export async function create({
   componentName,
-  isShadow = false,
+  styleType = 'standard',
   styleExtension = 'none',
   createTestFile = true,
   currentDir = process.cwd()
@@ -24,27 +28,46 @@ export async function create({
       `A directory already exists for the component ${componentName}`
     );
   }
+  const isShadow = styleType === 'shadow';
 
   await createFolder({ componentPath });
 
-  await createComponent({ componentName, componentPath, isShadow, styleExtension });
+  await createComponent({
+    componentName,
+    componentPath,
+    styleType,
+    styleExtension
+  });
 
   if (styleExtension !== 'none') {
-    await createComponentStyleFile({ componentName, componentPath, isShadow, styleExtension });
+    await createComponentStyleFile({
+      componentName,
+      componentPath,
+      isShadow,
+      styleExtension
+    });
   }
 
   if (createTestFile) {
-    await createComponentTestFile({ componentName, componentPath });
+    await createComponentUnitTestFile({
+      componentName,
+      componentPath,
+      isShadow
+    });
+    await createComponente2eTestFile({
+      componentName,
+      componentPath,
+      isShadow
+    });
   }
-
 }
 
 async function componentDirectoryExists(componentName: string) {
-  return await fse.pathExists(componentName);
+  return await fsExtra.pathExists(componentName);
 }
 
 async function createFolder({ componentPath }: { componentPath: string }) {
-  return await fse.ensureDir(componentPath);
+  return await fsExtra.ensureDir(componentPath);
 }
 function createComponentFileName(
   componentName: string,
@@ -56,21 +79,21 @@ function createComponentFileName(
 async function createComponent({
   componentName,
   componentPath,
-  isShadow,
+  styleType,
   styleExtension
 }: {
-    componentName: string;
-    componentPath: string;
-    isShadow: boolean;
-    styleExtension: styleExtension
-  }) {
+  componentName: string;
+  componentPath: string;
+  styleType: styleType;
+  styleExtension: styleExtension;
+}) {
   const componentContent = createComponentContent({
     componentName,
-    isShadow,
+    styleType,
     styleExtension
   });
 
-  return await fse.writeFile(
+  return await fsExtra.writeFile(
     path.resolve(componentPath, createComponentFileName(componentName)),
     componentContent
   );
@@ -82,17 +105,17 @@ async function createComponentStyleFile({
   isShadow,
   styleExtension
 }: {
-    componentName: string;
-    componentPath: string;
-    isShadow: boolean;
-    styleExtension: string;
-  }) {
+  componentName: string;
+  componentPath: string;
+  isShadow: boolean;
+  styleExtension: string;
+}) {
   const componentStyleContent = createStyleContent({
     componentName,
     isShadow
   });
 
-  return await fse.writeFile(
+  return await fsExtra.writeFile(
     path.resolve(
       componentPath,
       createComponentFileName(componentName, styleExtension)
@@ -101,21 +124,41 @@ async function createComponentStyleFile({
   );
 }
 
-async function createComponentTestFile({
+async function createComponentUnitTestFile({
   componentName,
   componentPath,
-  testPattern = 'spec'
+  isShadow
 }: {
-    componentName: string;
-    componentPath: string;
-    testPattern?: string;
-  }) {
-  const componentTestContent = createComponentTestContent({
-    componentName
-  });
+  isShadow: boolean;
+  componentName: string;
+  componentPath: string;
+}) {
+  const componentTestContent = isShadow
+    ? createShadowComponentUnitTest(componentName)
+    : createComponentUnitTest(componentName);
 
-  const testFileName = `${componentName}.${testPattern}`;
-  return await fse.writeFile(
+  const testFileName = `${componentName}.spec`;
+  return await fsExtra.writeFile(
+    path.resolve(componentPath, createComponentFileName(testFileName)),
+    componentTestContent
+  );
+}
+
+async function createComponente2eTestFile({
+  componentName,
+  componentPath,
+  isShadow
+}: {
+  isShadow: boolean;
+  componentName: string;
+  componentPath: string;
+}) {
+  const componentTestContent = isShadow
+    ? createShadowComponentUnitTest(componentName)
+    : createComponentUnitTest(componentName);
+
+  const testFileName = `${componentName}-e2e`;
+  return await fsExtra.writeFile(
     path.resolve(componentPath, createComponentFileName(testFileName)),
     componentTestContent
   );

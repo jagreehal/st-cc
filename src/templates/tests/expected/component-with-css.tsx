@@ -1,10 +1,10 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'my-app',
-  styleUrl: 'my-app.css'
+  tag: 'component-with-css',
+  styleUrl: './component-with-css.css'
 })
-export class MyApp {
+export class ComponentWithCss {
   @Prop() first: string;
   @Prop() last: string;
 

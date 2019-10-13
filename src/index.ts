@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 'use strict';
-import * as inquirer from 'inquirer';
+import inquirer from 'inquirer';
 import { create } from './creator';
 import { validateComponentName } from './utils';
 import { TypeAnswers, getQuestions } from './questions';
@@ -20,7 +20,7 @@ console.log(chalk.blue(welcomeMessage));
 
 if (hasProvidedComponentName) {
   const validationResult = validateComponentName(componentNameFromArgs);
-  if (validationResult.SUCCESS === false) {
+  if (!validationResult.SUCCESS) {
     console.error(chalk.red(validationResult.errorMessage));
     process.exit(1);
   }
@@ -32,18 +32,20 @@ const questions = getQuestions({
 
 async function run() {
   try {
-    const answers = await inquirer.prompt(questions) as TypeAnswers;
+    // @ts-ignore
+    const answers = (await inquirer.prompt(questions)) as TypeAnswers;
 
     if (hasProvidedComponentName) {
       answers.componentName = componentNameFromArgs;
     }
-    console.log(chalk.green(`🚀 Stencil component ${answers.componentName} created!`));
+    console.log(
+      chalk.green(`🚀 Stencil component ${answers.componentName} created!`)
+    );
 
     await create(answers);
   } catch (error) {
     console.error(chalk.red(`${error}`));
   }
-
 }
 
 run();

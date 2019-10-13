@@ -1,0 +1,4 @@
+src/templates/tests/expected/component-test-shadow-unit.spec.tsx
+src/templates/tests/expected/component-test-shadow-e2e.tsx
+src/templates/tests/expected/component-with-css.spec.tsx
+src/templates/tests/expected/component-with-css-e2e.tsx

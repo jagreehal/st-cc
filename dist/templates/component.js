@@ -1,15 +1,15 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const utils_1 = require("../utils");
-function createComponentContent({ componentName, styleExtension = 'none', isShadow = false }) {
+function createComponentContent({ componentName, styleExtension = 'none', styleType = 'standard' }) {
     const componentTags = [`tag: '${componentName}'`];
     if (styleExtension !== 'none') {
-        componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
+        componentTags.push(`styleUrl: './${componentName}.${styleExtension}'`);
     }
-    if (isShadow) {
-        componentTags.push(`shadow: true`);
+    if (styleType !== 'standard') {
+        componentTags.push(`${styleType}: true`);
     }
-    return `import { Component, Prop } from '@stencil/core';
+    return `import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   ${componentTags.join(`,\n  `)}

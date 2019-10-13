@@ -7,5 +7,7 @@ export function createStyleContent({
   componentName,
   isShadow = false
 }: CreateStyleArgs) {
-  return `${isShadow ? ':host' : componentName} {}`;
+  return `${isShadow ? ':host' : componentName} {
+}
+`;
 }

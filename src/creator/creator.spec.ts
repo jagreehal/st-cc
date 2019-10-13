@@ -1,6 +1,6 @@
-import * as fse from 'fs-extra';
-import * as path from 'path';
-import * as os from 'os';
+import fsExtra from 'fs-extra';
+import path from 'path';
+import os from 'os';
 import { create, COMPONENTS_PATH } from './index';
 
 function buildPath(
@@ -12,81 +12,127 @@ function buildPath(
   return path.join(testDir, componentsPath, componentName, fileName);
 }
 
+function createTestFileNames(componentName, TEST_DIR) {
+  return {
+    componentPath: buildPath(
+      TEST_DIR,
+      COMPONENTS_PATH,
+      componentName,
+      `${componentName}.tsx`
+    ),
+    componentStylePath: buildPath(
+      TEST_DIR,
+      COMPONENTS_PATH,
+      componentName,
+      `${componentName}.css`
+    ),
+
+    componentUnitTestPath: buildPath(
+      TEST_DIR,
+      COMPONENTS_PATH,
+      componentName,
+      `${componentName}.spec.tsx`
+    ),
+
+    componente2eTestPath: buildPath(
+      TEST_DIR,
+      COMPONENTS_PATH,
+      componentName,
+      `${componentName}-e2e.tsx`
+    )
+  };
+}
+
 describe('When running stencil-cli', () => {
-  const COMPONENT_NAME: string = 'my-app';
   let TEST_DIR: string;
-  let componentPath: string;
-  let componentStylePath: string;
-  let componentTestPath: string;
 
   beforeEach(async () => {
     TEST_DIR = path.join(os.tmpdir(), 'stencil-cli', 'integration');
-    await fse.emptyDir(TEST_DIR);
-
-    componentPath = buildPath(
-      TEST_DIR,
-      COMPONENTS_PATH,
-      COMPONENT_NAME,
-      `${COMPONENT_NAME}.tsx`
-    );
-    componentStylePath = buildPath(
-      TEST_DIR,
-      COMPONENTS_PATH,
-      COMPONENT_NAME,
-      `${COMPONENT_NAME}.css`
-    );
-
-    componentTestPath = buildPath(
-      TEST_DIR,
-      COMPONENTS_PATH,
-      COMPONENT_NAME,
-      `${COMPONENT_NAME}.spec.tsx`
-    );
+    await fsExtra.emptyDir(TEST_DIR);
   });
-  afterEach(async () => await fse.remove(TEST_DIR));
+  afterEach(async () => await fsExtra.remove(TEST_DIR));
 
   it('can create component without style or test', async () => {
-    const componentName = 'my-app';
+    const componentName = 'component-no-css';
     await create({
       componentName,
       currentDir: TEST_DIR,
       styleExtension: 'none',
-      createTestFile: false,
-      isShadow: false
+      createTestFile: false
     });
 
-    expect(await fse.pathExists(componentPath)).toBeTruthy();
-    expect(await fse.pathExists(componentStylePath)).toBeFalsy();
-    expect(await fse.pathExists(componentTestPath)).toBeFalsy();
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath
+    } = createTestFileNames(componentName, TEST_DIR);
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeFalsy();
+    expect(await fsExtra.pathExists(componentUnitTestPath)).toBeFalsy();
   });
 
   it('can create component with style', async () => {
-    const componentName = 'my-app';
+    const componentName = 'component-with-css-no-test';
     await create({
       componentName,
       currentDir: TEST_DIR,
       styleExtension: 'css',
-      createTestFile: false,
-      isShadow: false
+      createTestFile: false
     });
-
-    expect(await fse.pathExists(componentPath)).toBeTruthy();
-    expect(await fse.pathExists(componentStylePath)).toBeTruthy();
-    expect(await fse.pathExists(componentTestPath)).toBeFalsy();
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath
+    } = createTestFileNames(componentName, TEST_DIR);
   });
 
   it('can create component with style and test', async () => {
-    const componentName = 'my-app';
+    const componentName = 'component-with-css';
+    await create({
+      componentName,
+      currentDir: TEST_DIR,
+      styleExtension: 'css',
+      createTestFile: true
+    });
+
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath,
+      componente2eTestPath
+    } = createTestFileNames(componentName, TEST_DIR);
+
+    console.log(componente2eTestPath);
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentUnitTestPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componente2eTestPath)).toBeTruthy();
+  });
+
+  it('can create shadow component with style and test', async () => {
+    const componentName = 'component-css-shadow';
     await create({
       componentName,
       currentDir: TEST_DIR,
       styleExtension: 'css',
       createTestFile: true,
-      isShadow: false
+      styleType: 'shadow'
     });
 
-    expect(await fse.pathExists(componentPath)).toBeTruthy();
-    expect(await fse.pathExists(componentStylePath)).toBeTruthy();
-    expect(await fse.pathExists(componentTestPath)).toBeTruthy();
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath,
+      componente2eTestPath
+    } = createTestFileNames(componentName, TEST_DIR);
+
+    console.log(componentUnitTestPath);
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentUnitTestPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componente2eTestPath)).toBeTruthy();
   });
 });

@@ -1,10 +1,10 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'my-app',
-  shadow: true
+  tag: 'component-with-css-no-test',
+  styleUrl: './component-with-css-no-test.css'
 })
-export class MyApp {
+export class ComponentWithCssNoTest {
   @Prop() first: string;
   @Prop() last: string;
 

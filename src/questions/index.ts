@@ -1,13 +1,13 @@
 import { validateComponentName } from '../utils';
-import { styleExtension } from '../types';
+import { styleExtension, styleType } from '../types';
 
 export type TypeAnswers = {
   currentDir: string;
   componentName?: string;
-  isShadow: boolean;
-  styleExtension: styleExtension,
+  styleExtension: styleExtension;
+  styleType?: styleType;
   createTestFile: boolean;
-}
+};
 
 export const QUESTIONS = [
   {
@@ -24,12 +24,6 @@ export const QUESTIONS = [
     }
   },
   {
-    type: 'confirm',
-    name: 'isShadow',
-    message: 'Is shadow component?',
-    default: false
-  },
-  {
     type: 'list',
     name: 'styleExtension',
     default: 'css',
@@ -40,9 +34,21 @@ export const QUESTIONS = [
     }
   },
   {
+    type: 'list',
+    name: 'styleType',
+    message: 'What type of style?',
+    choices: ['shadow', 'scoped', 'standard'],
+    filter(val: string) {
+      return val.toLowerCase();
+    },
+    when: answers => {
+      return answers.styleExtension !== 'none';
+    }
+  },
+  {
     type: 'confirm',
     name: 'createTestFile',
-    message: 'Create test file?',
+    message: 'Create test files',
     default: true
   }
 ];
@@ -50,8 +56,8 @@ export const QUESTIONS = [
 export function getQuestions({
   hasProvidedComponentName = false
 }: {
-    hasProvidedComponentName?: boolean;
-  }) {
+  hasProvidedComponentName?: boolean;
+}) {
   const questions = [...QUESTIONS];
   if (hasProvidedComponentName) {
     questions.shift();

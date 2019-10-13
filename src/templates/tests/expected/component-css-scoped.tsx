@@ -1,9 +1,11 @@
-import { Component, Prop } from '@stencil/core';
+import { Component, Prop, h } from '@stencil/core';
 
 @Component({
-  tag: 'my-app'
+  tag: 'component-css-scoped',
+  styleUrl: './component-css-scoped.css',
+  scoped: true
 })
-export class MyApp {
+export class ComponentCssScoped {
   @Prop() first: string;
   @Prop() last: string;
 

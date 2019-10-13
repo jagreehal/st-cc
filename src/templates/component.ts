@@ -1,27 +1,27 @@
 import { convertComponentNameToComponentClassName } from '../utils';
-import { styleExtension } from '../types';
+import { styleExtension, styleType } from '../types';
 
 type CreateComponentArgs = {
   componentName: string;
   styleExtension?: styleExtension;
-  isShadow?: boolean;
+  styleType?: styleType;
 };
 
 export function createComponentContent({
   componentName,
   styleExtension = 'none',
-  isShadow = false
+  styleType = 'standard'
 }: CreateComponentArgs) {
   const componentTags = [`tag: '${componentName}'`];
   if (styleExtension !== 'none') {
-    componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
+    componentTags.push(`styleUrl: './${componentName}.${styleExtension}'`);
   }
 
-  if (isShadow) {
-    componentTags.push(`shadow: true`);
+  if (styleType !== 'standard') {
+    componentTags.push(`${styleType}: true`);
   }
 
-  return `import { Component, Prop } from '@stencil/core';
+  return `import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   ${componentTags.join(`,\n  `)}

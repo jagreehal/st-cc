@@ -1,21 +1,18 @@
 {
   "compileOnSave": false,
   "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "jsx": "react",
+    "jsxFactory": "h",
     "target": "es6",
     "module": "commonjs",
-    "lib": [
-      "es6",
-      "dom"
-    ],
-    "noImplicitAny": true,
+    "lib": ["es6", "dom"],
+    "noImplicitAny": false,
     "sourceMap": true,
     "outDir": "dist",
     "experimentalDecorators": true
   },
-  "exclude": [
-    "node_modules",
-    "src/templates/tests/expected"
-  ]
+  "exclude": ["node_modules", "src/templates/tests/expected"]
 }
