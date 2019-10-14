@@ -4,7 +4,7 @@ const utils_1 = require("../utils");
 function createComponentContent({ componentName, styleExtension = 'none', styleType = 'standard' }) {
     const componentTags = [`tag: '${componentName}'`];
     if (styleExtension !== 'none') {
-        componentTags.push(`styleUrl: './${componentName}.${styleExtension}'`);
+        componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
     }
     if (styleType !== 'standard') {
         componentTags.push(`${styleType}: true`);

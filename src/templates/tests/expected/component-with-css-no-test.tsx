@@ -2,7 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'component-with-css-no-test',
-  styleUrl: './component-with-css-no-test.css'
+  styleUrl: 'component-with-css-no-test.css'
 })
 export class ComponentWithCssNoTest {
   @Prop() first: string;

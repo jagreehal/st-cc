@@ -2,7 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'component-css-shadow',
-  styleUrl: './component-css-shadow.css',
+  styleUrl: 'component-css-shadow.css',
   shadow: true
 })
 export class ComponentCssShadow {

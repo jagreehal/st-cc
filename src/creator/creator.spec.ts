@@ -1,3 +1,4 @@
+import { styleExtension } from './../types/index';
 import fsExtra from 'fs-extra';
 import path from 'path';
 import os from 'os';
@@ -12,7 +13,15 @@ function buildPath(
   return path.join(testDir, componentsPath, componentName, fileName);
 }
 
-function createTestFileNames(componentName, TEST_DIR) {
+function createTestFileNames({
+  componentName,
+  TEST_DIR,
+  styleExtension
+}: {
+  componentName: string;
+  TEST_DIR: string;
+  styleExtension?: styleExtension;
+}) {
   return {
     componentPath: buildPath(
       TEST_DIR,
@@ -20,11 +29,12 @@ function createTestFileNames(componentName, TEST_DIR) {
       componentName,
       `${componentName}.tsx`
     ),
+
     componentStylePath: buildPath(
       TEST_DIR,
       COMPONENTS_PATH,
       componentName,
-      `${componentName}.css`
+      `${componentName}.${styleExtension || 'css'}`
     ),
 
     componentUnitTestPath: buildPath(
@@ -52,7 +62,7 @@ describe('When running stencil-cli', () => {
   });
   afterEach(async () => await fsExtra.remove(TEST_DIR));
 
-  it('can create component without style or test', async () => {
+  it('can create component without style or tests', async () => {
     const componentName = 'component-no-css';
     await create({
       componentName,
@@ -64,12 +74,14 @@ describe('When running stencil-cli', () => {
     const {
       componentPath,
       componentStylePath,
-      componentUnitTestPath
-    } = createTestFileNames(componentName, TEST_DIR);
+      componentUnitTestPath,
+      componente2eTestPath
+    } = createTestFileNames({ componentName, TEST_DIR });
 
     expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
     expect(await fsExtra.pathExists(componentStylePath)).toBeFalsy();
     expect(await fsExtra.pathExists(componentUnitTestPath)).toBeFalsy();
+    expect(await fsExtra.pathExists(componente2eTestPath)).toBeFalsy();
   });
 
   it('can create component with style', async () => {
@@ -84,7 +96,48 @@ describe('When running stencil-cli', () => {
       componentPath,
       componentStylePath,
       componentUnitTestPath
-    } = createTestFileNames(componentName, TEST_DIR);
+    } = createTestFileNames({ componentName, TEST_DIR });
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
+  });
+
+  it('can create component with scss', async () => {
+    const componentName = 'component-with-scss';
+    const styleExtension = 'scss';
+    await create({
+      componentName,
+      styleExtension,
+      currentDir: TEST_DIR,
+      createTestFile: false
+    });
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath
+    } = createTestFileNames({ componentName, TEST_DIR, styleExtension });
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
+  });
+
+  it('can create component with less', async () => {
+    const componentName = 'component-with-less';
+    const styleExtension = 'less';
+    await create({
+      componentName,
+      styleExtension,
+      currentDir: TEST_DIR,
+      createTestFile: false
+    });
+    const {
+      componentPath,
+      componentStylePath,
+      componentUnitTestPath
+    } = createTestFileNames({ componentName, TEST_DIR, styleExtension });
+
+    expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
+    expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
   });
 
   it('can create component with style and test', async () => {
@@ -101,9 +154,7 @@ describe('When running stencil-cli', () => {
       componentStylePath,
       componentUnitTestPath,
       componente2eTestPath
-    } = createTestFileNames(componentName, TEST_DIR);
-
-    console.log(componente2eTestPath);
+    } = createTestFileNames({ componentName, TEST_DIR });
 
     expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
     expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();
@@ -126,9 +177,7 @@ describe('When running stencil-cli', () => {
       componentStylePath,
       componentUnitTestPath,
       componente2eTestPath
-    } = createTestFileNames(componentName, TEST_DIR);
-
-    console.log(componentUnitTestPath);
+    } = createTestFileNames({ componentName, TEST_DIR });
 
     expect(await fsExtra.pathExists(componentPath)).toBeTruthy();
     expect(await fsExtra.pathExists(componentStylePath)).toBeTruthy();

@@ -2,7 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'component-css-scoped',
-  styleUrl: './component-css-scoped.css',
+  styleUrl: 'component-css-scoped.css',
   scoped: true
 })
 export class ComponentCssScoped {

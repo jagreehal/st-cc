@@ -28,7 +28,7 @@ export const QUESTIONS = [
     name: 'styleExtension',
     default: 'css',
     message: 'What type of style file?',
-    choices: ['scss', 'css', 'none'],
+    choices: ['none', 'css', 'scss', 'less'],
     filter(val: string) {
       return val.toLowerCase();
     }
@@ -37,7 +37,7 @@ export const QUESTIONS = [
     type: 'list',
     name: 'styleType',
     message: 'What type of style?',
-    choices: ['shadow', 'scoped', 'standard'],
+    choices: ['standard', 'shadow', 'scoped'],
     filter(val: string) {
       return val.toLowerCase();
     },

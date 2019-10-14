@@ -14,7 +14,7 @@ export function createComponentContent({
 }: CreateComponentArgs) {
   const componentTags = [`tag: '${componentName}'`];
   if (styleExtension !== 'none') {
-    componentTags.push(`styleUrl: './${componentName}.${styleExtension}'`);
+    componentTags.push(`styleUrl: '${componentName}.${styleExtension}'`);
   }
 
   if (styleType !== 'standard') {

@@ -2,7 +2,7 @@ import { Component, Prop, h } from '@stencil/core';
 
 @Component({
   tag: 'component-with-css',
-  styleUrl: './component-with-css.css'
+  styleUrl: 'component-with-css.css'
 })
 export class ComponentWithCss {
   @Prop() first: string;
