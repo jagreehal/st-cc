@@ -67,7 +67,10 @@ async function componentDirectoryExists(componentName: string) {
 }
 
 async function createFolder({ componentPath }: { componentPath: string }) {
-  return await fsExtra.ensureDir(componentPath);
+  return await /* TODO: JSFIX could not patch the breaking change:
+  Creating a directory with fs-extra no longer returns the path 
+  Suggested fix: The returned promise no longer includes the path of the new directory */
+  fsExtra.ensureDir(componentPath);
 }
 function createComponentFileName(
   componentName: string,
